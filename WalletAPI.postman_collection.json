@@ -1,0 +1,350 @@
+{
+	"info": {
+		"_postman_id": "e64bd902-13f1-4822-8e4e-8b974dafc0bc",
+		"name": "WalletAPI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create wallet",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.bitaps.com/btc/testnet/v1/",
+					"protocol": "https",
+					"host": [
+						"api",
+						"bitaps",
+						"com"
+					],
+					"path": [
+						"btc",
+						"testnet",
+						"v1",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create wallet",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "a797b939-bc01-45b7-a237-64c37b1d4032",
+						"exec": [
+							"let responsejson;\r",
+							"\r",
+							"const a=13;\r",
+							"const b=5;\r",
+							"console.log(a+b);\r",
+							"\r",
+							"pm.test (\"Status code is 200\",function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"    });\r",
+							"\r",
+							"pm.test(\"Response contains wallet_id\",function(){\r",
+							"     responsejson= pm.response.json();\r",
+							"    \r",
+							"    pm.expect (responsejson).to.have.property ('wallet_id');\r",
+							"});\r",
+							"\r",
+							"pm.environment.set(\"wallet_id\",responsejson.wallet_id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n     \"callback_link\": \"https:anylink.com\"\r\n     \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/create/wallet",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"create",
+						"wallet"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create wallet payment address",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "b1b55ae5-707f-4309-afe3-c68508710737",
+						"exec": [
+							"pm.test (\"Status code is 200\",function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Wallet length is <=53\",function(){\r",
+							"    pm.expect(pm.response.json().wallet_id).length ==0;\r",
+							"})\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"wallet_id\": \"BTCuxQB2oF8woxFeHHjhE1G7DB5K8B5CcFrxhhnz4Jzwng2V3aV7k\",\r\n    \"callback_link\": \"https:anylink.com\",\r\n    \"confirmations\": \"0\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/create/wallet/payment/address",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"create",
+						"wallet",
+						"payment",
+						"address"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get wallet state",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "d3470fcc-6a4c-427c-8708-47ca9d0459e8",
+						"exec": [
+							"pm.test (\"Status code is 200\",function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"console.info(pm.environment.get('wallet_id'));"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{}\r\n  ",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/wallet/state/{{wallet_id}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"wallet",
+						"state",
+						"{{wallet_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get wallet transactions",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "4fb08142-4cc1-4e01-9a52-095ed2cfe7e7",
+						"exec": [
+							"pm.test (\"Status code is 200\",function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"response must be valid and have a body\", function () {\r",
+							"     pm.response.to.be.ok;\r",
+							"     pm.response.to.be.withBody;\r",
+							"     pm.response.to.be.json;\r",
+							"});\r",
+							"    \r",
+							"\r",
+							"\r",
+							"  \r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/wallet/transactions/{{wallet_id}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"wallet",
+						"transactions",
+						"{{wallet_id}}"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						},
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						},
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get wallet addresses",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "f5f455a7-11e9-41ea-90eb-42a92f922ead",
+						"exec": [
+							"pm.test (\"Status code is 200\",function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Response property matches environment variable\", function () {\r",
+							"  pm.expect(pm.response.json().name).to.eql(pm.environment.get(\"name\"));\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/wallet/addresses/{{wallet_id}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"wallet",
+						"addresses",
+						"{{wallet_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get wallet daily statistic",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "2aa5a7eb-f3c0-4aac-950b-6f9b730f4d25",
+						"exec": [
+							"pm.test (\"Status code is 200\",function(){\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Response time is less than 300ms\", () => {\r",
+							"  pm.expect(pm.response.responseTime).to.be.below(300);\r",
+							"});\r",
+							"pm.test(\"Status is ok, response is json\", function () {\r",
+							"    pm.response.to.be.ok;\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/wallet/daily/statistic/{{wallet_id}}",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"wallet",
+						"daily",
+						"statistic",
+						"{{wallet_id}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
